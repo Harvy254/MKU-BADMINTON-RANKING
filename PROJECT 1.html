@@ -1,0 +1,338 @@
+;<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
+    <title> MOUNT KENYA UNIVERSITY BADMINTON RANKING </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('mount_kenya_university_logo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        header {
+            text-align: center;
+            background: linear-gradient(to right, black, red); /* Gradient from black to red */
+            color: white;
+            padding: 20px;
+        }
+        header h1 {
+            font-family: 'Times New Roman', Times, serif; /* Times New Roman font for main heading */
+        }
+        header p {
+		font-family: Copperplate gothic bold;
+            font-size: 1.2em;
+        }
+        nav {
+            background: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            max-width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .container h2 {
+            font-family: 'Algerian', serif; /* Algerian font for the second heading */
+        }
+        .player-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #5D9EC7, #ffffff); /* Blue to white gradient */
+            margin: 10px 0;
+            padding: 20px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            color: white;
+            z-index: 1;
+            cursor: pointer; /* Make it clickable */
+            opacity: 0; /* Initially hidden */
+            transform: translateY(50px); /* Initially position cards below */
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            position: relative; /* For the star placement */
+        }
+
+        .player-card.visible {
+            opacity: 1;
+            transform: translateY(0); /* Animate to original position */
+            animation: glowing-border 3s infinite alternate; /* LED glow animation */
+        }
+
+        /* Add the glowing border effect */
+        @keyframes glowing-border {
+            0% {
+                box-shadow: 0 0 10px 2px rgba(255, 0, 0, 0.8), 0 0 15px 4px rgba(255, 0, 0, 0.5);
+            }
+            25% {
+                box-shadow: 0 0 10px 2px rgba(0, 255, 0, 0.8), 0 0 15px 4px rgba(0, 255, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 10px 2px rgba(0, 0, 255, 0.8), 0 0 15px 4px rgba(0, 0, 255, 0.5);
+            }
+            75% {
+                box-shadow: 0 0 10px 2px rgba(255, 255, 0, 0.8), 0 0 15px 4px rgba(255, 255, 0, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 10px 2px rgba(255, 0, 255, 0.8), 0 0 15px 4px rgba(255, 0, 255, 0.5);
+            }
+        }
+
+        .player-card img {
+            width: 120px; /* Normal size */
+            height: 120px; /* Normal size */
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .player-info {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .player-rating {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Add tiny stars to bottom right corner of player cards */
+        .player-card::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, white 0%, blue 60%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 5px rgba(0, 0, 255, 0.8);
+            animation: sparkle 2s infinite alternate;
+        }
+
+        /* Animation for the stars */
+        @keyframes sparkle {
+            0% {
+                transform: scale(0.7);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Enlarged Profile Style */
+        .enlarged {
+            width: 200px !important;
+            height: 200px !important;
+            border: 4px solid gold;
+            z-index: 2;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            width: 80%;
+        }
+
+        .modal-content img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+        }
+
+        .modal-content h3 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .modal-content p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Badminton Animation in Background -->
+    <img src="shuttlecock_animation.gif" class="animation" alt="Badminton Animation">
+
+    <header>
+        <h1>M.K.U BADMINTON PLAYER RANKINGS</h1>
+        <p>✨🏸✨Welcome to the official player rankings for our M.K.U Badminton team! ✨🏸✨</p>
+    </header>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#rankings">Rankings</a>
+        <a href="#about">About</a>
+    </nav>
+
+    <div id="rankings" class="container">
+        <h2>Player Rankings</h2>
+
+        <!-- Placeholder for 30 player cards -->
+        <!-- The actual players will be populated via JavaScript -->
+    </div>
+
+    <!-- Modal for enlarged player info -->
+    <div id="player-modal" class="player-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img id="modal-img" src="" alt="Player Photo">
+            <h3 id="modal-name"></h3>
+            <p id="modal-rating"></p>
+        </div>
+    </div>
+
+    <footer class="container">
+        <p>&copy; M.K.U 2025 Badminton Rankings. All rights reserved.  (Created by @Harvy) </p>
+    </footer>
+
+    <script>
+        const playerData = [
+            { name: "HARVY SINGH", image: "player1.jpg", rating: 98 },
+            { name: "VICTOR KUNGU", image: "Player2.jpg", rating: 99 },
+            { name: "DALMATIUS KIPTOO", image: "player3.jpg", rating: 100 },
+            { name: "FRED NYARIBO", image: "player4.jpg", rating: 71 },
+            { name: "Player 5", image: "player5.jpg", rating: 75 },
+            { name: "Player 6", image: "player6.jpg", rating: 78 },
+            { name: "Player 7", image: "player7.jpg", rating: 80 },
+            { name: "Player 8", image: "player8.jpg", rating: 91 },
+            { name: "Player 9", image: "player9.jpg", rating: 85 },
+            { name: "Player 10", image: "player10.jpg", rating: 93 },
+            { name: "Player 11", image: "player11.jpg", rating: 80 },
+            { name: "Player 12", image: "player12.jpg", rating: 90 },
+            { name: "Player 13", image: "player13.jpg", rating: 72 },
+            { name: "Player 14", image: "player14.jpg", rating: 82 },
+            { name: "Player 15", image: "player15.jpg", rating: 78 },
+            { name: "Player 16", image: "player16.jpg", rating: 84 },
+            { name: "Player 17", image: "player17.jpg", rating: 86 },
+            { name: "Player 18", image: "player18.jpg", rating: 90 },
+            { name: "Player 19", image: "player19.jpg", rating: 74 },
+            { name: "Player 20", image: "player20.jpg", rating: 77 },
+            { name: "Player 21", image: "player21.jpg", rating: 81 },
+            { name: "Player 22", image: "player22.jpg", rating: 89 },
+            { name: "Player 23", image: "player23.jpg", rating: 92 },
+            { name: "Player 24", image: "player24.jpg", rating: 94 },
+            { name: "Player 25", image: "player25.jpg", rating: 83 },
+            { name: "Player 26", image: "player26.jpg", rating: 76 },
+            { name: "Player 27", image: "player27.jpg", rating: 88 },
+            { name: "Player 28", image: "player28.jpg", rating: 79 },
+            { name: "Player 29", image: "player29.jpg", rating: 85 },
+            { name: "Player 30", image: "player30.jpg", rating: 90 },
+        ];
+
+        function sortPlayers() {
+            playerData.sort((a, b) => b.rating - a.rating); // Sort players by rating in descending order
+            updateRankings();
+        }
+
+        function updateRankings() {
+            const container = document.getElementById('rankings');
+            container.innerHTML = '<h2> PLAYER RANKINGS </h2>'; // Reset the container
+
+            playerData.forEach((player, index) => {
+                const playerCard = document.createElement('div');
+                playerCard.classList.add('player-card');
+                playerCard.innerHTML = 
+                    `<img src="${player.image}" alt="${player.name}" onclick="enlargeProfile('${player.name}', '${player.image}', ${player.rating})">
+                    <div class="player-info">
+                        <h3>Rank ${index + 1}: ${player.name}</h3>
+                        <p class="player-rating">Average Rating: ${player.rating}</p>
+                    </div>`;
+                container.appendChild(playerCard);
+                // Apply animation when the player card comes into the viewport
+                observeElement(playerCard);
+            });
+        }
+
+        // Intersection Observer to animate player cards
+        function observeElement(element) {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Stop observing after it's visible
+                    }
+                });
+            }, { threshold: 0.5 }); // Trigger when 50% of the element is in view
+            observer.observe(element);
+        }
+
+        function enlargeProfile(name, image, rating) {
+            const modal = document.getElementById('player-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalName = document.getElementById('modal-name');
+            const modalRating = document.getElementById('modal-rating');
+            
+            modal.style.display = 'flex';
+            modalImg.src = image;
+            modalName.innerText = name;
+            modalRating.innerText = `Rating: ${rating}`;
+        }
+
+        // Close modal by clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('player-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Close modal button
+        document.querySelector('.close-modal').addEventListener('click', () => {
+            document.getElementById('player-modal').style.display = 'none';
+        });
+
+        // Initially sort players
+        sortPlayers();
+    </script>
+</body>
+</html>
